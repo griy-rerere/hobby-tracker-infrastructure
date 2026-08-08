@@ -1,0 +1,20 @@
+[project]
+name = "hobby-tracker-infrastructure"
+version = "0.1.0"
+description = "Infrastructure for Hobby Tracker Application such as DB implementations and etc."
+authors = [
+    {name = "Your Name",email = "you@example.com"}
+]
+license = "MIT"
+requires-python = ">=3.14"
+dependencies = [
+    "hobby-tracker-core @ file:///C:/Users/Grigoriy/Source/Hobby-Tracker/hobby-tracker-core"
+]
+
+
+[build-system]
+requires = ["poetry-core>=2.0.0,<3.0.0"]
+build-backend = "poetry.core.masonry.api"
+
+[tool.poetry.dependencies]
+hobby-tracker-core = {develop = true}
