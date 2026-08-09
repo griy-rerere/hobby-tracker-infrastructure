@@ -17,6 +17,10 @@ jobs:
         with:
           python-version: "3.14"
 
+      - name: Clone core
+        working-directory: ..
+        run: git clone https://github.com/griy-rerere/hobby-tracker-core.git
+
       - name: Install Poetry
         run: pip install poetry
 
