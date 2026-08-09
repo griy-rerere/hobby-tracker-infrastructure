@@ -1,11 +1,10 @@
 from importlib.resources import files
 
-
 _SQL = files(__name__)
 
 
 def _load_query(name: str) -> str:
-	return _SQL.joinpath(name).read_text(encoding="utf-8")
+    return _SQL.joinpath(name).read_text(encoding="utf-8")
 
 
 SAVE_HOBBY = _load_query("save_hobby.sql")
