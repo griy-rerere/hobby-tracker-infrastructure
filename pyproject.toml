@@ -1,0 +1,51 @@
+[project]
+name = "hobby-tracker-infrastructure"
+version = "0.1.0"
+description = "Infrastructure for Hobby Tracker Application such as DB implementations and etc."
+authors = [
+    {name = "Your Name",email = "you@example.com"}
+]
+license = "MIT"
+requires-python = ">=3.14"
+dependencies = [
+]
+
+
+[build-system]
+requires = ["poetry-core>=2.0.0,<3.0.0"]
+build-backend = "poetry.core.masonry.api"
+
+[tool.poetry.dependencies]
+hobby-tracker-core = { path = "../hobby-tracker-core", develop = true }
+
+[dependency-groups]
+dev = [
+    "ruff (>=0.16.2,<0.17.0)",
+    "mypy (>=2.3.0,<3.0.0)",
+    "pytest (>=9.1.1,<10.0.0)",
+    "pytest-cov (>=7.1.0,<8.0.0)",
+    "pre-commit (>=4.6.1,<5.0.0)"
+]
+
+[tool.ruff]
+line-length = 88
+src = ["src", "tests"]
+
+[tool.ruff.lint]
+select = [
+    "E",
+    "F",
+    "I",
+]
+
+[tool.ruff.format]
+quote-style = "double"
+
+[tool.mypy]
+python_version = "3.14"
+strict = true
+
+[tool.pytest.ini_options]
+testpaths = [
+    "tests"
+]
