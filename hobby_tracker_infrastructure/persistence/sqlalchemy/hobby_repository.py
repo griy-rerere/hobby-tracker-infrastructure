@@ -2,32 +2,25 @@ from dataclasses import dataclass
 from uuid import UUID
 
 from hobby_tracker.domain import exceptions
-from hobby_tracker.domain.hobby import Hobby, HobbyName
+from hobby_tracker.domain.hobby import Hobby
 from sqlalchemy import exists, select
 from sqlalchemy.orm import Session
 
 from . import models
 
 
-def hobby_mapper(hobby_model: models.Hobby) -> Hobby:
-    name = object.__new__(HobbyName)
-    object.__setattr__(name, "value", hobby_model.name)
-    hobby = object.__new__(Hobby)
-    object.__setattr__(hobby, "id", hobby_model.id)
-    object.__setattr__(hobby, "name", name)
-    return hobby
-
-
-def rollback_hobby(hobby: Hobby, snapshot: Hobby) -> None:
-    object.__setattr__(hobby, "id", snapshot.id)
-    object.__setattr__(hobby, "name", snapshot.name)
-
-
 class SqlalchemyHobbyRepository:
     @dataclass(frozen=True, slots=True)
-    class Tracked:
+    class _Tracked:
         entity: Hobby
         model: models.Hobby
+
+        def rollback(self) -> None:
+            snapshot = self.model.as_domain()
+            object.__setattr__(self.entity, "_name", snapshot._name)
+
+        def persist(self) -> None:
+            self.model.name = self.entity.name.value
 
     def _create_model(self, hobby: Hobby) -> models.Hobby:
         return models.Hobby(id=hobby.id, name=hobby.name.value, user_id=self._user_id)
@@ -35,9 +28,9 @@ class SqlalchemyHobbyRepository:
     def __init__(self, session: Session, user_id: UUID) -> None:
         self._session = session
         self._user_id = user_id
-        self._tracked: dict[UUID, SqlalchemyHobbyRepository.Tracked] = {}
+        self._tracked: dict[UUID, SqlalchemyHobbyRepository._Tracked] = {}
         self._dirty: dict[UUID, Hobby] = {}
-        self._deleted: dict[UUID, SqlalchemyHobbyRepository.Tracked] = {}
+        self._deleted: dict[UUID, SqlalchemyHobbyRepository._Tracked] = {}
 
     def add(self, hobby: Hobby) -> None:
         self._dirty[hobby.id] = hobby
@@ -65,8 +58,8 @@ class SqlalchemyHobbyRepository:
         if hobby_model is None:
             raise exceptions.HobbyNotFound(id)
 
-        hobby = hobby_mapper(hobby_model)
-        self._tracked[id] = self.Tracked(entity=hobby, model=hobby_model)
+        hobby = hobby_model.as_domain()
+        self._tracked[id] = self._Tracked(entity=hobby, model=hobby_model)
 
         return hobby
 
@@ -100,25 +93,23 @@ class SqlalchemyHobbyRepository:
 
     def persist_changes(self) -> None:
         for tracked in self._tracked.values():
-            tracked.model.id = tracked.entity.id
-            tracked.model.name = tracked.entity.name.value
+            tracked.persist()
 
         for tracked in self._deleted.values():
             self._session.delete(tracked.model)
         self._deleted.clear()
 
-        for hobby in self._dirty.values():
-            model = self._create_model(hobby)
+        for entity in self._dirty.values():
+            model = self._create_model(entity)
             self._session.add(model)
-            self._tracked[hobby.id] = self.Tracked(entity=hobby, model=model)
+            self._tracked[entity.id] = self._Tracked(entity=entity, model=model)
         self._dirty.clear()
 
     def rollback_changes(self) -> None:
         self._tracked |= self._deleted
 
         for tracked in self._tracked.values():
-            snapshot = hobby_mapper(tracked.model)
-            rollback_hobby(tracked.entity, snapshot)
+            tracked.rollback()
 
         self._deleted.clear()
         self._dirty.clear()
