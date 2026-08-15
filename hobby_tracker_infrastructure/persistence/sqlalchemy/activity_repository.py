@@ -134,7 +134,7 @@ class SqlalchemyActivityRepository:
         self._deleted.clear()
         self._dirty.clear()
 
-    def clear(self) -> None:
+    def clear_tracking(self) -> None:
         self._tracked.clear()
         self._dirty.clear()
         self._deleted.clear()
