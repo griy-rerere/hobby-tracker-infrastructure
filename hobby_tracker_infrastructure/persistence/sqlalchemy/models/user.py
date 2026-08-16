@@ -6,6 +6,6 @@ from .base import Base
 
 
 class User(Base):
-    __tablename__ = "users"
+    __tablename__ = "user"
 
     id: Mapped[UUID] = mapped_column(primary_key=True)
