@@ -6,7 +6,7 @@
 
 This repository contains implementations of some core interfaces for the Hobby Tracker application.
 
-The  project uses the core package [hobby-tracker-core](../hobby-tracker-core).
+The  project uses the core package [hobby-tracker-core](https://github.com/griy-rerere/hobby-tracker-core).
 
 ---
 
