@@ -1,9 +1,9 @@
 [project]
 name = "hobby-tracker-infrastructure"
 version = "0.1.0"
-description = "Infrastructure for Hobby Tracker Application such as DB implementations and etc."
+description = "Python package of The Infrastructure layer of Hobby Tracker"
 authors = [
-    {name = "Your Name",email = "you@example.com"}
+    {name = "Grigoriy Re:Re:Re:",email = "griy_rerere.contact@icloud.com"}
 ]
 license = "MIT"
 requires-python = ">=3.14"
