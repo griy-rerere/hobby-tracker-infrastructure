@@ -8,13 +8,11 @@ This repository contains implementations of some core interfaces for the Hobby T
 
 The  project uses the core package [hobby-tracker-core](https://github.com/griy-rerere/hobby-tracker-core).
 
----
-
 ## 🎯 Features
 
 The infrastructure package now has these sub-packages:
 
-#### Persistence(SQL Databases)
+### Persistence(SQL Databases)
 
 Uses [sqlalchemy](https://github.com/sqlalchemy/sqlalchemy) ORM library for implemetation of these interfaces:
 
@@ -22,7 +20,7 @@ Uses [sqlalchemy](https://github.com/sqlalchemy/sqlalchemy) ORM library for impl
 * Domain Repositories
 * UnitOfWork
 
-##### Table structure
+#### Table structure
 
 ```mermaid
 erDiagram
@@ -50,15 +48,13 @@ erDiagram
     hobby ||--o{ activity : "consists of"
 ```
 
-##### Migrations
+#### Migrations
 
-[Alembic](https://github.com/sqlalchemy/alembic) library is used to manage migrations. See [alembic](https://github.com/sqlalchemy/alembic) to check the migration process. Put these envs to your `.env` file:
+Alembic library is used to manage migrations. See [alembic](https://github.com/sqlalchemy/alembic) to check the migration process. Put these envs to your `.env` file:
 
 | Environment Variable | meaning |
 | -------------------- | ------- |
 | `DATABASE_URL` | Standart **sqlalchemy** db url with format `dialect+driver://username:password@host:port/database` |
-
----
 
 ## 🛠️ Code Quality & Verification
 
@@ -73,14 +69,12 @@ Before committing, make sure all quality gates pass successfully:
   ```
 * **Strict Static Typing (MyPy):**
   ```bash
-  poetry run mypy src
+  poetry run mypy hobby_tracker_infrastrucure
   ```
 * **Unit Testing (PyTest):**
   ```bash
   poetry run pytest
   ```
-
----
 
 ## 📥 Local Installation & Integration
 
@@ -97,8 +91,6 @@ Or install it directly via pip:
 ```bash
 pip install git+https://github.com/griy-rerere/hobby-tracker-infrastructure.git
 ```
-
----
 
 ## 📜 License
 
