@@ -1,16 +1,18 @@
 from datetime import datetime, timedelta
 from uuid import UUID
 
+from hobby_tracker.application.common import (
+    HobbyStats,
+    Stats,
+)
 from hobby_tracker.application.queries import (
     HobbiesStatsQuery,
     HobbiesStatsView,
-    HobbyStats,
-    Stats,
 )
 from sqlalchemy import func, select
 from sqlalchemy.orm import Session
 
-from .models import Activity, Hobby
+from ..models import Activity, Hobby
 
 
 class SqlalchemyHobbiesStatsHandler:
@@ -28,6 +30,7 @@ class SqlalchemyHobbiesStatsHandler:
 
         stmt_hobbies = (
             select(
+                Hobby.id.label("hobby_id"),
                 Hobby.name.label("hobby_name"),
                 func.coalesce(
                     func.sum(Activity.duration_minutes) / 60.0,
@@ -68,8 +71,10 @@ class SqlalchemyHobbiesStatsHandler:
         result_common = self._session.execute(stmt_common).mappings().one()
 
         view = HobbiesStatsView(
+            stats_chart=bytes(),
             hobbies_stats=(
                 HobbyStats(
+                    hobby_id=row["hobby_id"],
                     hobby_name=row["hobby_name"],
                     stats=Stats(
                         total_hours=row["total_hours"],
