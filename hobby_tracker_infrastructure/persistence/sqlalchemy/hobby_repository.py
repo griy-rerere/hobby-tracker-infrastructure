@@ -2,7 +2,7 @@ from dataclasses import dataclass
 from uuid import UUID
 
 from hobby_tracker.domain import exceptions
-from hobby_tracker.domain.hobby import Hobby
+from hobby_tracker.domain.hobby import Hobby, HobbyName
 from sqlalchemy import exists, select
 from sqlalchemy.orm import Session
 
@@ -63,7 +63,7 @@ class SqlalchemyHobbyRepository:
 
         return hobby
 
-    def exists_name(self, id: UUID) -> bool:
+    def exists(self, id: UUID) -> bool:
         if id in self._tracked or id in self._dirty:
             return True
         if id in self._deleted:
@@ -71,6 +71,21 @@ class SqlalchemyHobbyRepository:
 
         stmt = select(
             exists().where(models.Hobby.id == id, models.Hobby.user_id == self._user_id)
+        )
+        return bool(self._session.scalar(stmt))
+
+    def name_exists(self, name: HobbyName) -> bool:
+        if name in (
+            {tracked.entity.name for tracked in self._tracked.values()}
+            | {entity.name for entity in self._dirty.values()}
+        ):
+            return True
+        if name in {tracked.entity.name for tracked in self._tracked.values()}:
+            return False
+        stmt = select(
+            exists().where(
+                models.Hobby.name == name.value, models.Hobby.user_id == self._user_id
+            )
         )
         return bool(self._session.scalar(stmt))
 
