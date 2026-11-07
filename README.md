@@ -1,4 +1,4 @@
-# Hobby Tracker - Infrastructure (v0.1.0)
+# Hobby Tracker - Infrastructure (v0.1.1)
 
 ![Python Version](https://img.shields.io/badge/Python%20Version-3.14%2B-0969da?logo=python)
 ![ORM](https://img.shields.io/badge/ORM-SQLAlchemy-ffffff?logo=sqlalchemy)
