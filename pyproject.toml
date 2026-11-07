@@ -1,6 +1,6 @@
 [project]
 name = "hobby-tracker-infrastructure"
-version = "0.1.0"
+version = "0.1.1"
 description = "Python package of The Infrastructure layer of Hobby Tracker"
 authors = [
     {name = "Grigoriy Re:Re:Re:",email = "griy_rerere.contact@icloud.com"}
