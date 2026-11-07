@@ -63,7 +63,7 @@ class SqlalchemyHobbyRepository:
 
         return hobby
 
-    def exists(self, id: UUID) -> bool:
+    def exists_name(self, id: UUID) -> bool:
         if id in self._tracked or id in self._dirty:
             return True
         if id in self._deleted:
