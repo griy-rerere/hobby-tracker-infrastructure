@@ -1,4 +1,4 @@
-# Hobby Tracker - Infrastructure (v0.1.1)
+# Hobby Tracker - Infrastructure (v0.2.0)
 
 ![Python Version](https://img.shields.io/badge/Python%20Version-3.14%2B-0969da?logo=python)
 ![ORM](https://img.shields.io/badge/ORM-SQLAlchemy-ffffff?logo=sqlalchemy)
@@ -26,6 +26,8 @@ Uses [sqlalchemy](https://github.com/sqlalchemy/sqlalchemy) ORM library for impl
 erDiagram
     user {
         UUID id PK "Primary Key"
+        string(32) username "UNIQUE"
+        string(255) password_hash "Not null"
     }
     telegram_account {
         int telegram_id PK "Primary Key"
